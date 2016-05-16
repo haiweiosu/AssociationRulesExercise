@@ -38,7 +38,7 @@ def main():
 
 	items_list = extract_purchased_item(data)
 
-	with open('inputdata.csv', 'wb') as f:
+	with open('inputdata.txt', 'wb') as f:
 		writer = csv.writer(f, delimiter = ',')
 		for line in items_list:
 			writer.writerow(line)

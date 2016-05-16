@@ -1,11 +1,11 @@
 # ADAPTED FROM HARRINGTON 11.5
 from numpy import *
-from 
+from config import DATA_PATH
 
 def loadDataSet():
     return [[1, 3, 4], [2, 3, 5], [1, 2, 3, 5], [2, 5]]
 
-def createC1(dataSet):
+def createC1(DATA_PATH):
     C1 = []
     for transaction in dataSet:
         for item in transaction:
@@ -45,6 +45,7 @@ def aprioriGen(Lk, k): #creates Ck
     return retList
 
 def apriori(dataSet, minSupport = 0.5):
+
     C1 = createC1(dataSet)
     D = map(set, dataSet)
     L1, supportData = scanD(D, C1, minSupport)
@@ -96,3 +97,6 @@ def pntRules(ruleList, itemMeaning):
             print itemMeaning[item]
         print "confidence: %f" % ruleTup[2]
         print       #print a blank line
+
+def main():
+    
