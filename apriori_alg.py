@@ -49,6 +49,7 @@ def aprioriGen(Lk, k): #creates Ck
             L1.sort(); L2.sort()
             if L1==L2: #if first k-2 elements are equal
                 retList.append(Lk[i] | Lk[j]) #set union
+    print retList
     return retList
 
 #general apriori algorithm 
@@ -65,6 +66,7 @@ def apriori(dataSet, minSupport = 0.2):
         supportData.update(supK)
         L.append(Lk)
         k += 1
+    print L, supportData
     return L, supportData
 
 #generate itemsets that contain frequently purchased item with confident score
