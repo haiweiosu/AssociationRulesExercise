@@ -1,13 +1,19 @@
-# ADAPTED FROM HARRINGTON 11.5
 from numpy import *
-from config import DATA_PATH
+import csv
 
-def loadDataSet():
-    return [[1, 3, 4], [2, 3, 5], [1, 2, 3, 5], [2, 5]]
+#load the dataset from txt file, skipping the empty list
+def loadData():
+    results = []
+    with open('inputdata.txt', 'r') as inputfile:
+        for row in csv.reader(inputfile):
+            if len(row) != 0:
+                results.append(row)
+    return results
 
+#
 def createC1(DATA_PATH):
     C1 = []
-    for transaction in dataSet:
+    for transaction in DATA_PATH:
         for item in transaction:
             if not [item] in C1:
                 C1.append([item])
@@ -44,7 +50,7 @@ def aprioriGen(Lk, k): #creates Ck
                 retList.append(Lk[i] | Lk[j]) #set union
     return retList
 
-def apriori(dataSet, minSupport = 0.5):
+def apriori(dataSet, minSupport = 0.2):
 
     C1 = createC1(dataSet)
     D = map(set, dataSet)
@@ -75,7 +81,7 @@ def calcConf(freqSet, H, supportData, brl, minConf=0.7):
     for conseq in H:
         conf = supportData[freqSet]/supportData[freqSet-conseq] #calc confidence
         if conf >= minConf: 
-            print freqSet-conseq,'-->',conseq,'conf:',conf
+            # print freqSet-conseq,'-->',conseq,'conf:',conf
             brl.append((freqSet-conseq, conseq, conf))
             prunedH.append(conseq)
     return prunedH
@@ -88,15 +94,23 @@ def rulesFromConseq(freqSet, H, supportData, brl, minConf=0.7):
         if (len(Hmp1) > 1):    #need at least two sets to merge
             rulesFromConseq(freqSet, Hmp1, supportData, brl, minConf)
             
-def pntRules(ruleList, itemMeaning):
+def pntRules(ruleList):
     for ruleTup in ruleList:
         for item in ruleTup[0]:
-            print itemMeaning[item]
-        print "           -------->"
+            print item, 
+        print " -------->", 
         for item in ruleTup[1]:
-            print itemMeaning[item]
+            print item, 
         print "confidence: %f" % ruleTup[2]
         print       #print a blank line
 
 def main():
-    
+    dataSet = loadData()
+    L, supportData = apriori(dataSet, minSupport = 0.2)
+    ruleList = generateRules(L, supportData, minConf = 0.7)
+    pntRules(ruleList)
+
+
+
+if __name__ == "__main__":
+    main()
