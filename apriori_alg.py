@@ -10,7 +10,7 @@ def loadData():
                 results.append(row)
     return results
 
-#
+#Create a frozenset of each item in C1
 def createC1(DATA_PATH):
     C1 = []
     for transaction in DATA_PATH:
@@ -20,8 +20,9 @@ def createC1(DATA_PATH):
                 
     C1.sort()
     return map(frozenset, C1)#use frozen set so we
-                            #can use it as a key in a dict    
+                            #can use it as a key in a dict  
 
+#Calculate support for every itemset
 def scanD(D, Ck, minSupport):
     ssCnt = {}
     for tid in D:
@@ -50,6 +51,7 @@ def aprioriGen(Lk, k): #creates Ck
                 retList.append(Lk[i] | Lk[j]) #set union
     return retList
 
+#general apriori algorithm 
 def apriori(dataSet, minSupport = 0.2):
 
     C1 = createC1(dataSet)
@@ -65,6 +67,7 @@ def apriori(dataSet, minSupport = 0.2):
         k += 1
     return L, supportData
 
+#generate itemsets that contain frequently purchased item with confident score
 def generateRules(L, supportData, minConf=0.7):  #supportData is a dict coming from scanD
     bigRuleList = []
     for i in range(1, len(L)):#only get the sets with two or more items
@@ -74,8 +77,9 @@ def generateRules(L, supportData, minConf=0.7):  #supportData is a dict coming f
                 rulesFromConseq(freqSet, H1, supportData, bigRuleList, minConf)
             else:
                 calcConf(freqSet, H1, supportData, bigRuleList, minConf)
-    return bigRuleList         
+    return bigRuleList 
 
+#calculate confident score
 def calcConf(freqSet, H, supportData, brl, minConf=0.7):
     prunedH = [] #create new list to return
     for conseq in H:
@@ -93,7 +97,8 @@ def rulesFromConseq(freqSet, H, supportData, brl, minConf=0.7):
         Hmp1 = calcConf(freqSet, Hmp1, supportData, brl, minConf)
         if (len(Hmp1) > 1):    #need at least two sets to merge
             rulesFromConseq(freqSet, Hmp1, supportData, brl, minConf)
-            
+
+#print out frequent itemset with confident score      
 def pntRules(ruleList):
     for ruleTup in ruleList:
         for item in ruleTup[0]:
@@ -103,7 +108,8 @@ def pntRules(ruleList):
             print item, 
         print "confidence: %f" % ruleTup[2]
         print       #print a blank line
-
+        
+#main method to apply Apriori algorithm on givn dataset
 def main():
     dataSet = loadData()
     L, supportData = apriori(dataSet, minSupport = 0.2)

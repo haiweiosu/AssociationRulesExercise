@@ -2,13 +2,12 @@
 ##################################
 
 #Prblem statement
-
-##################################
-
 #Given a dataset of transactions (100k rows) from a large retailer, 
 #find groups of items that are frequently purchased together. 
 #Each row is a single transaction with a '1' denoting that item was in the transaction. 
 #Submit your findings along with any code/description of tools used to solve the problem.
+
+##################################
 
 import pandas as pd
 import csv
@@ -33,9 +32,7 @@ def extract_purchased_item(data):
 
 
 def main():
-
 	data = pd.read_csv("data.csv")
-
 	items_list = extract_purchased_item(data)
 
 	with open('inputdata.txt', 'wb') as f:
@@ -46,5 +43,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
